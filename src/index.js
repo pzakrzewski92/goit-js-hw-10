@@ -1,12 +1,13 @@
 import './css/styles.css';
+
 import debounce from 'lodash.debounce';
 import { fetchCountries } from './js/fetchCountries';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const DELAY = 300;
 const inputCountry = document.querySelector('input#search-box');
-const listCountry = document.querySelector('.list-country');
-const infoCountry = document.querySelector('.info-country');
+const CountryList = document.querySelector('.list-country');
+const CountryInfo = document.querySelector('.info-country');
 
 const animateCSS = (element, animation, prefix = 'animate__') =>
   // We create a Promise and return it
@@ -46,16 +47,16 @@ function inputHandler(e) {
   const searchInput = e.target.value.trim();
 
   if (!searchInput) {
-    cleanMarkup(listCountry);
-    cleanMarkup(infoCountry);
+    cleanMarkup(CountryList);
+    cleanMarkup(CountryInfo);
     return;
   }
 
   fetchCountries(searchInput)
     .then(data => {
       if (data.length > 20) {
-        cleanMarkup(listCountry);
-        cleanMarkup(infoCountry);
+        cleanMarkup(CountryList);
+        cleanMarkup(CountryInfo);
         Notify.warning(
           'Too many matches found. Please enter a more specific name'
         );
@@ -64,21 +65,21 @@ function inputHandler(e) {
       renderMarkup(data);
     })
     .catch(err => {
-      cleanMarkup(listCountry);
-      cleanMarkup(infoCountry);
+      cleanMarkup(CountryList);
+      cleanMarkup(CountryInfo);
       Notify.failure('Oops, there is no country with that name');
     });
 }
 
 function renderMarkup(data) {
   if (data.length === 1) {
-    cleanMarkup(listCountry);
+    cleanMarkup(CountryList);
     const infoMarkup = createInfoMarkup(data);
-    infoCountry.innerHTML = infoMarkup;
+    CountryInfo.innerHTML = infoMarkup;
   } else {
-    cleanMarkup(infoCountry);
+    cleanMarkup(CountryInfo);
     const listMarkup = createListMarkup(data);
-    listCountry.innerHTML = listMarkup;
+    CountryList.innerHTML = listMarkup;
 
     const selectCountry = document.querySelectorAll('li');
     selectCountry.forEach(button => {
@@ -88,14 +89,10 @@ function renderMarkup(data) {
         const clickedCountry = data.filter(
           country => country.name.common === indexCountry
         );
-        infoCountry.innerHTML = createInfoMarkup(clickedCountry);
-        // listCountry.classList.add(
-        //   'animate__animated',
-        //   'animate__bounceOutLeft'
-        // );
+        CountryInfo.innerHTML = createInfoMarkup(clickedCountry);
         animateCSS('.my-element', 'bounceOutLeft');
         setTimeout(() => {
-          cleanMarkup(listCountry);
+          cleanMarkup(CountryList);
         }, 900);
       });
     });

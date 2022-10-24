@@ -2,7 +2,7 @@ import { Block } from 'notiflix/build/notiflix-block-aio';
 
 const COUNTRY_API_URL = 'https://restcountries.com/v3.1/name/';
 
-const fetchCountries = name => {
+function fetchCountries(name) {
   Block.standard('.js-element', {
     backgroundColor: 'rgba(255, 0, 0, 0)',
     svgSize: '56px',
@@ -25,6 +25,6 @@ const fetchCountries = name => {
     .finally(() => {
       Block.remove('.js-element', 300);
     });
-};
+}
 
 export { fetchCountries };
